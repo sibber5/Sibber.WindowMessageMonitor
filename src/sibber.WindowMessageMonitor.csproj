@@ -3,11 +3,11 @@
   <PropertyGroup>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <TargetFrameworks>net9.0-windows;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net8.0-windows;netstandard2.0</TargetFrameworks>
     <LangVersion>13.0</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackageId>sibber.WindowMessageMonitor</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>sibber</Authors>
     <Description>A class that lets you listen to window messages for a given window, forked from dotMorten/WinUIEx.Messaging.WindowMessageMonitor</Description>
     <Copyright>Copyright (c) 2025 sibber5</Copyright>
