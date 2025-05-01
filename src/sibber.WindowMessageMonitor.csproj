@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TargetFrameworks>net9.0-windows;netstandard2.0</TargetFrameworks>
+    <LangVersion>13.0</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PackageId>sibber.WindowMessageMonitor</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>sibber</Authors>
+    <Description>A class that lets you listen to window messages for a given window, forked from dotMorten/WinUIEx.Messaging.WindowMessageMonitor</Description>
+    <Copyright>Copyright (c) 2025 sibber5</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/sibber5/sibber.WindowMessageMonitor</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sibber5/sibber.WindowMessageMonitor</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
+    <PackageReference Include="PolySharp" Version="1.15.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.Memory" Version="4.6.3" />
+  </ItemGroup>
+
+</Project>
