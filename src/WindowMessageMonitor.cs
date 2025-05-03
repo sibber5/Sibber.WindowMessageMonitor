@@ -40,7 +40,7 @@ namespace sibber.WindowMessageMonitor;
 /// Disposing is not thread safe.<br/>
 /// Subscribing and unsubscribing to the events is thread safe.
 /// </remarks>
-public sealed partial class WindowMessageMonitor : IWindowsMessageMonitor, IDisposable
+public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDisposable
 {
     public HWnd HWnd { get; }
     
@@ -99,7 +99,7 @@ public sealed partial class WindowMessageMonitor : IWindowsMessageMonitor, IDisp
         _disposed = true;
     }
 
-    /// <inheritdoc cref="IWindowsMessageMonitor.WindowMessageReceived"/>
+    /// <inheritdoc cref="IWindowMessageMonitor.WindowMessageReceived"/>
     /// <exception cref="Win32Exception"></exception>
     public event RefEventHandler<WindowMessageEventArgs> WindowMessageReceived
     {

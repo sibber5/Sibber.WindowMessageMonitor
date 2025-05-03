@@ -13,7 +13,7 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     
     <PackageId>sibber.WindowMessageMonitor</PackageId>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <Authors>sibber</Authors>
     <Description>A class that lets you listen to window messages for a given window, forked from dotMorten/WinUIEx.Messaging.WindowMessageMonitor</Description>
     <Copyright>Copyright (c) 2025 sibber5</Copyright>

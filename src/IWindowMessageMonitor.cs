@@ -5,7 +5,7 @@ namespace sibber.WindowMessageMonitor;
 /// <summary>
 /// Implementations of this interface monitors window messages sent to a specified window and notify subsribers when messages are recieved.
 /// </summary>
-public interface IWindowsMessageMonitor
+public interface IWindowMessageMonitor
 {
     /// <summary>
     /// The handle of the window that is being monitored.
