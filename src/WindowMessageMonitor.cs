@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using sibber.Common.Native.Windows.Windowing;
 using sibber.WindowMessageMonitor.Native;
@@ -32,19 +33,16 @@ namespace sibber.WindowMessageMonitor;
 // SOFTWARE.
 
 /// <summary>
-/// The message monitor allows you to monitor/listen to window message events for a given window.
+/// Monitors window messages sent to the specified window (by subclassing it) and notifies subsribers when messages are recieved.
 /// </summary>
 /// <remarks>
 /// If the instance was created with <see cref="CreateWithMessageWindow"/> then it must be disposed on the same thread it was created on and in the same executing assembly.<br/>
 /// Disposing is not thread safe.<br/>
 /// Subscribing and unsubscribing to the events is thread safe.
 /// </remarks>
-public sealed partial class WindowMessageMonitor : IDisposable
+public sealed partial class WindowMessageMonitor : IWindowsMessageMonitor, IDisposable
 {
-    /// <summary>
-    /// The handle of the window that is being monitored.
-    /// </summary>
-    public HWnd HWnd { get; } = HWnd.Null;
+    public HWnd HWnd { get; }
     
     private GCHandle? _monitorGCHandle;
     private readonly object _lockObject = new();
@@ -60,7 +58,7 @@ public sealed partial class WindowMessageMonitor : IDisposable
     /// <summary>
     /// Initialize a new instance of the <see cref="WindowMessageMonitor"/> class.
     /// </summary>
-    /// <param name="hWnd">The window handle to listen to messages for</param>
+    /// <param name="hWnd">The window handle to listen to messages for.</param>
     public WindowMessageMonitor(HWnd hWnd)
     {
         HWnd = hWnd;
@@ -86,9 +84,9 @@ public sealed partial class WindowMessageMonitor : IDisposable
     {
         if (_disposed) return;
 
-        if (_windowMessageReceived != null)
+        if (_windowMessageReceived is not null)
         {
-            RemoveWindowSubclass(true);
+            if (_windowClassName is null) RemoveWindowSubclass(true);
             _windowMessageReceived = null;
         }
 
@@ -101,9 +99,8 @@ public sealed partial class WindowMessageMonitor : IDisposable
         _disposed = true;
     }
 
-    /// <summary>
-    /// Event raised when a windows message is received.
-    /// </summary>
+    /// <inheritdoc cref="IWindowsMessageMonitor.WindowMessageReceived"/>
+    /// <exception cref="Win32Exception"></exception>
     public event RefEventHandler<WindowMessageEventArgs> WindowMessageReceived
     {
         add
@@ -126,9 +123,9 @@ public sealed partial class WindowMessageMonitor : IDisposable
 
 #if NET7_0_OR_GREATER
     [UnmanagedCallersOnly(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvStdcall)])]
-    private static nint NewWindowProc(HWnd hWnd, uint uMsg, nuint wParam, nint lParam, nuint uIdSubclass, nuint dwRefData)
+    private static nint SubclassWindowProc(HWnd hWnd, uint uMsg, nuint wParam, nint lParam, nuint uIdSubclass, nuint dwRefData)
 #else
-    private nint NewWindowProc(HWnd hWnd, uint uMsg, nuint wParam, nint lParam, nuint uIdSubclass, nuint dwRefData)
+    private nint SubclassWindowProc(HWnd hWnd, uint uMsg, nuint wParam, nint lParam, nuint uIdSubclass, nuint dwRefData)
 #endif
     {
         var handle = GCHandle.FromIntPtr((nint)dwRefData);
@@ -148,20 +145,19 @@ public sealed partial class WindowMessageMonitor : IDisposable
 
     private unsafe void SetWindowSubclass()
     {
-        if (_windowClassName is not null) return;
         if (_monitorGCHandle.HasValue) return;
 
         lock (_lockObject)
         {
             ThrowHelper.ThrowIfDisposed(_disposed, this);
-            if (_windowClassName is not null) return;
+            Debug.Assert(_windowClassName is null);
             if (_monitorGCHandle.HasValue) return;
             
             _monitorGCHandle = GCHandle.Alloc(this);
 #if NET7_0_OR_GREATER
-            bool ok = PInvoke.Windowing.SetWindowSubclass(HWnd, &NewWindowProc, _classId, (nuint)GCHandle.ToIntPtr(_monitorGCHandle.Value).ToPointer());
+            bool ok = PInvoke.Windowing.SetWindowSubclass(HWnd, &SubclassWindowProc, _classId, (nuint)GCHandle.ToIntPtr(_monitorGCHandle.Value).ToPointer());
 #else
-            _callback = new(NewWindowProc);
+            _callback = new(SubclassWindowProc);
             bool ok = PInvoke.Windowing.SetWindowSubclass(HWnd, _callback, _classId, (nuint)GCHandle.ToIntPtr(_monitorGCHandle.Value).ToPointer());
 #endif
             if (!ok) throw new Win32Exception(Macros.E_FAIL, "Error setting window subclass.");
@@ -170,17 +166,16 @@ public sealed partial class WindowMessageMonitor : IDisposable
 
     private unsafe void RemoveWindowSubclass(bool disposing = false)
     {
-        if (_windowClassName is not null) return;
         if (!_monitorGCHandle.HasValue) return;
 
         lock (_lockObject)
         {
             if (!disposing) ThrowHelper.ThrowIfDisposed(_disposed, this);
-            if (_windowClassName is not null) return;
+            Debug.Assert(_windowClassName is null);
             if (!_monitorGCHandle.HasValue) return;
 
 #if NET7_0_OR_GREATER
-            bool ok = PInvoke.Windowing.RemoveWindowSubclass(HWnd, &NewWindowProc, _classId);
+            bool ok = PInvoke.Windowing.RemoveWindowSubclass(HWnd, &SubclassWindowProc, _classId);
 #else
             bool ok = PInvoke.Windowing.RemoveWindowSubclass(HWnd, _callback!, _classId);
 #endif
