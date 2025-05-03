@@ -83,19 +83,5 @@ internal static unsafe partial class PInvoke
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         public static extern HWnd CreateWindowEx(uint dwExStyle, string lpClassName, string? lpWindowName, uint dwStyle, int X, int Y, int nWidth, int nHeight, HWnd hWndParent, Handle hMenu, Handle hInstance, [Optional] void* lpParam);
 #endif
-
-#if NET7_0_OR_GREATER
-        public static bool ShowWindow(HWnd hWnd, int nCmdShow) => ShowWindow(hWnd.Value, nCmdShow);
-
-        [LibraryImport("USER32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        private static partial bool ShowWindow(nint hWnd, int nCmdShow);
-#else
-        [DllImport("USER32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern bool ShowWindow(HWnd hWnd, int nCmdShow);
-#endif
     }
 }

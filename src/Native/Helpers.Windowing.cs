@@ -8,7 +8,7 @@ public static partial class Helpers
 {
     internal static class Windowing
     {
-        public static unsafe HWnd CreateMessageWindow(string className, string? windowName, Handle instance)
+        public static unsafe HWnd CreateMessageOnlyWindow(string className, string? windowName, Handle instance)
         {
             return PInvoke.Windowing.CreateWindowEx(0, className, windowName, 0, 0, 0, 0, 0, Macros.HWND_MESSAGE, Handle.Null, instance);
         }

@@ -35,15 +35,18 @@ public sealed partial class WindowMessageMonitor
         );
         if (PInvoke.Windowing.RegisterClass(ref windowClass) == 0) throw new Win32Exception();
 
-        HWnd = Helpers.Windowing.CreateMessageWindow(_windowClassName, windowName, _instance);
-        //PInvoke.Windowing.ShowWindow(HWnd, 1);
+        HWnd = Helpers.Windowing.CreateMessageOnlyWindow(_windowClassName, windowName, _instance);
 
         _classId = _classIdCounter++;
 
         if (HWnd == HWnd.Null) throw new Win32Exception();
     }
 
-    public static WindowMessageMonitor CreateWithMessageWindow() => new();
+    /// <summary>
+    /// <para>Creates a window message monitor along with a message-only window (which it monitors).</para>
+    /// <para>The monitor owns the window and ensures its disposal when the monitor is disposed. <b>The monitor must be disposed on the same thread it was created on and in the same executing assembly.</b></para>
+    /// </summary>
+    public static WindowMessageMonitor CreateWithMessageOnlyWindow() => new();
 
     private nint WindowProc(HWnd hWnd, uint uMsg, nuint wParam, nint lParam)
     {

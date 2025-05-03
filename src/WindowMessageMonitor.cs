@@ -33,10 +33,10 @@ namespace sibber.WindowMessageMonitor;
 // SOFTWARE.
 
 /// <summary>
-/// Monitors window messages sent to the specified window (by subclassing it) and notifies subsribers when messages are recieved.
+/// Monitors window messages sent to the specified window and notifies subsribers when messages are recieved.
 /// </summary>
 /// <remarks>
-/// If the instance was created with <see cref="CreateWithMessageWindow"/> then it must be disposed on the same thread it was created on and in the same executing assembly.<br/>
+/// If the instance was created with <see cref="CreateWithMessageOnlyWindow"/> then it must be disposed on the same thread it was created on and in the same executing assembly.<br/>
 /// Disposing is not thread safe.<br/>
 /// Subscribing and unsubscribing to the events is thread safe.
 /// </remarks>
@@ -71,7 +71,7 @@ public sealed partial class WindowMessageMonitor : IWindowsMessageMonitor, IDisp
     }
 
     /// <summary>
-    /// If the instance was created with <see cref="CreateWithMessageWindow"/> then it must be disposed on the same thread it was created on and in the same executing assembly.<br/>
+    /// If the instance was created with <see cref="CreateWithMessageOnlyWindow"/> then it must be disposed on the same thread it was created on and in the same executing assembly.<br/>
     /// Disposing is not thread safe.
     /// </summary>
     public void Dispose()
