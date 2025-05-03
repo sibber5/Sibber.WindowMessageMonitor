@@ -1,4 +1,6 @@
 ﻿using System.Runtime.InteropServices;
+using sibber.Common.Native.Windows;
+using sibber.Common.Native.Windows.Windowing;
 using sibber.WindowMessageMonitor.Native.Windowing;
 
 namespace sibber.WindowMessageMonitor.Native;
@@ -16,15 +18,21 @@ internal static unsafe partial class PInvoke
         public static extern nint DefSubclassProc(HWnd hWnd, uint uMsg, nuint wParam, nint lParam);
 
 #if NET7_0_OR_GREATER
-        [LibraryImport("COMCTL32.dll")]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static unsafe partial bool SetWindowSubclass(HWnd hWnd, delegate* unmanaged[Stdcall]<HWnd, uint, nuint, nint, nuint, nuint, nint> pfnSubclass, nuint uIdSubclass, nuint dwRefData);
+        public static unsafe bool SetWindowSubclass(HWnd hWnd, delegate* unmanaged[Stdcall]<HWnd, uint, nuint, nint, nuint, nuint, nint> pfnSubclass, nuint uIdSubclass, nuint dwRefData)
+            => SetWindowSubclass(hWnd.Value, pfnSubclass, uIdSubclass, dwRefData);
 
         [LibraryImport("COMCTL32.dll")]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static unsafe partial bool RemoveWindowSubclass(HWnd hWnd, delegate* unmanaged[Stdcall]<HWnd, uint, nuint, nint, nuint, nuint, nint> pfnSubclass, nuint uIdSubclass);
+        private static unsafe partial bool SetWindowSubclass(nint hWnd, delegate* unmanaged[Stdcall]<HWnd, uint, nuint, nint, nuint, nuint, nint> pfnSubclass, nuint uIdSubclass, nuint dwRefData);
+
+        public static unsafe bool RemoveWindowSubclass(HWnd hWnd, delegate* unmanaged[Stdcall]<HWnd, uint, nuint, nint, nuint, nuint, nint> pfnSubclass, nuint uIdSubclass)
+            => RemoveWindowSubclass(hWnd.Value, pfnSubclass, uIdSubclass);
+
+        [LibraryImport("COMCTL32.dll")]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static unsafe partial bool RemoveWindowSubclass(nint hWnd, delegate* unmanaged[Stdcall]<HWnd, uint, nuint, nint, nuint, nuint, nint> pfnSubclass, nuint uIdSubclass);
 #else
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         public unsafe delegate nint SUBCLASSPROC(HWnd hWnd, uint uMsg, nuint wParam, nint lParam, nuint uIdSubclass, nuint dwRefData);
@@ -50,10 +58,12 @@ internal static unsafe partial class PInvoke
         public static extern bool UnregisterClass([MarshalAs(UnmanagedType.LPWStr)] string lpClassName, Handle hInstance);
 
 #if NET7_0_OR_GREATER
+        public static bool DestroyWindow(HWnd hWnd) => DestroyWindow(hWnd.Value);
+
         [LibraryImport("USER32.dll", EntryPoint = "DestroyWindow", SetLastError = true)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static partial bool DestroyWindow(HWnd hWnd);
+        private static partial bool DestroyWindow(nint hWnd);
 #else
         [DllImport("USER32.dll", EntryPoint = "DestroyWindow", ExactSpelling = true, SetLastError = true)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
@@ -62,9 +72,12 @@ internal static unsafe partial class PInvoke
 #endif
 
 #if NET7_0_OR_GREATER
+        public static HWnd CreateWindowEx(uint dwExStyle, string lpClassName, string? lpWindowName, uint dwStyle, int X, int Y, int nWidth, int nHeight, HWnd hWndParent, Handle hMenu, Handle hInstance, [Optional] void* lpParam)
+            => (HWnd)CreateWindowEx(dwExStyle, lpClassName, lpWindowName, dwStyle, X, Y, nWidth, nHeight, hWndParent.Value, hMenu.Value, hInstance.Value, lpParam);
+
         [LibraryImport("USER32.dll", EntryPoint = "CreateWindowExW", StringMarshalling = StringMarshalling.Utf16, SetLastError = true)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static partial HWnd CreateWindowEx(uint dwExStyle, string lpClassName, string? lpWindowName, uint dwStyle, int X, int Y, int nWidth, int nHeight, HWnd hWndParent, Handle hMenu, Handle hInstance, [Optional] void* lpParam);
+        private static partial nint CreateWindowEx(uint dwExStyle, string lpClassName, string? lpWindowName, uint dwStyle, int X, int Y, int nWidth, int nHeight, nint hWndParent, nint hMenu, nint hInstance, [Optional] void* lpParam);
 #else
         [DllImport("USER32.dll", EntryPoint = "CreateWindowExW", ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
@@ -72,42 +85,12 @@ internal static unsafe partial class PInvoke
 #endif
 
 #if NET7_0_OR_GREATER
-        [LibraryImport("USER32.dll", EntryPoint = "GetMessageW", SetLastError = true)]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static partial int GetMessage(MSG* lpMsg, HWnd hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
-#else
-        [DllImport("USER32.dll", EntryPoint = "GetMessageW", ExactSpelling = true, SetLastError = true)]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern int GetMessage(MSG* lpMsg, HWnd hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
-#endif
+        public static bool ShowWindow(HWnd hWnd, int nCmdShow) => ShowWindow(hWnd.Value, nCmdShow);
 
-#if NET7_0_OR_GREATER
-        [LibraryImport("USER32.dll")]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static partial bool TranslateMessage(MSG* lpMsg);
-#else
-        [DllImport("USER32.dll", ExactSpelling = true)]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool TranslateMessage(MSG* lpMsg);
-#endif
-
-#if NET7_0_OR_GREATER
-        [LibraryImport("USER32.dll", EntryPoint = "DispatchMessageW")]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static unsafe partial nint DispatchMessage(MSG* lpMsg);
-#else
-        [DllImport("USER32.dll", EntryPoint = "DispatchMessageW", ExactSpelling = true)]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern unsafe nint DispatchMessage(MSG* lpMsg);
-#endif
-
-#if NET7_0_OR_GREATER
         [LibraryImport("USER32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static partial bool ShowWindow(HWnd hWnd, int nCmdShow);
+        private static partial bool ShowWindow(nint hWnd, int nCmdShow);
 #else
         [DllImport("USER32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]

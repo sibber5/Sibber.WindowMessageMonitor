@@ -1,7 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
+using sibber.Common.Native.Windows;
+using sibber.Common.Native.Windows.Windowing;
 using sibber.WindowMessageMonitor.Native;
 using sibber.WindowMessageMonitor.Native.Windowing;
+using Helpers = sibber.WindowMessageMonitor.Native.Helpers;
 
 namespace sibber.WindowMessageMonitor;
 

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using sibber.Common.Native.Windows.Windowing;
 using sibber.WindowMessageMonitor.Native;
-using sibber.WindowMessageMonitor.Native.Windowing;
 
 namespace sibber.WindowMessageMonitor;
 

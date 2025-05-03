@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using sibber.Common.Native.Windows.Windowing;
 
 namespace sibber.WindowMessageMonitor.Native.Windowing;
 

@@ -1,4 +1,4 @@
-﻿using sibber.WindowMessageMonitor.Native.Windowing;
+﻿using sibber.Common.Native.Windows.Windowing;
 
 namespace sibber.WindowMessageMonitor;
 

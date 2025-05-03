@@ -36,4 +36,8 @@
     <PackageReference Include="System.Memory" Version="4.6.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="sibber.Common.Native.Windows" Version="1.0.*" />
+  </ItemGroup>
+
 </Project>
