@@ -15,7 +15,7 @@ public static partial class Helpers
         public static Handle GetCurrentHINSTANCE()
         {
 #if NETSTANDARD2_0
-        return PInvoke.Misc.GetModuleHandle(typeof(Handle).Assembly.Location);
+            return PInvoke.Misc.GetModuleHandle(typeof(Handle).Assembly.Location);
 #else
             return (Handle)Marshal.GetHINSTANCE(typeof(Handle).Module);
 #endif

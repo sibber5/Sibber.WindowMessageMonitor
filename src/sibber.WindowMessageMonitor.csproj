@@ -6,6 +6,12 @@
     <TargetFrameworks>net8.0-windows;netstandard2.0</TargetFrameworks>
     <LangVersion>13.0</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    
+    <AnalysisLevel>latest-all</AnalysisLevel>
+    <WarningsAsErrors>nullable</WarningsAsErrors>
+    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    
     <PackageId>sibber.WindowMessageMonitor</PackageId>
     <Version>1.0.1</Version>
     <Authors>sibber</Authors>
@@ -18,7 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">

@@ -27,13 +27,14 @@ internal static class ThrowHelper
 #endif
     }
 
+    [DoesNotReturn]
 #if NET6_0_OR_GREATER
     [StackTraceHidden]
 #endif
     public static void ThrowUnreachable()
     {
 #if NETSTANDARD
-        throw new Exception("Unreachable code reached.");
+        throw new InvalidOperationException("Unreachable code reached.");
 #else
         throw new UnreachableException();
 #endif

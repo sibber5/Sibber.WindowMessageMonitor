@@ -49,10 +49,17 @@ internal static unsafe partial class PInvoke
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool UnregisterClass([MarshalAs(UnmanagedType.LPWStr)] string lpClassName, Handle hInstance);
 
+#if NET7_0_OR_GREATER
+        [LibraryImport("USER32.dll", EntryPoint = "DestroyWindow", SetLastError = true)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static partial bool DestroyWindow(HWnd hWnd);
+#else
         [DllImport("USER32.dll", EntryPoint = "DestroyWindow", ExactSpelling = true, SetLastError = true)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool DestroyWindow(HWnd hWnd);
+#endif
 
 #if NET7_0_OR_GREATER
         [LibraryImport("USER32.dll", EntryPoint = "CreateWindowExW", StringMarshalling = StringMarshalling.Utf16, SetLastError = true)]
@@ -60,23 +67,52 @@ internal static unsafe partial class PInvoke
         public static partial HWnd CreateWindowEx(uint dwExStyle, string lpClassName, string? lpWindowName, uint dwStyle, int X, int Y, int nWidth, int nHeight, HWnd hWndParent, Handle hMenu, Handle hInstance, [Optional] void* lpParam);
 #else
         [DllImport("USER32.dll", EntryPoint = "CreateWindowExW", ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         public static extern HWnd CreateWindowEx(uint dwExStyle, string lpClassName, string? lpWindowName, uint dwStyle, int X, int Y, int nWidth, int nHeight, HWnd hWndParent, Handle hMenu, Handle hInstance, [Optional] void* lpParam);
 #endif
 
+#if NET7_0_OR_GREATER
+        [LibraryImport("USER32.dll", EntryPoint = "GetMessageW", SetLastError = true)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        public static partial int GetMessage(MSG* lpMsg, HWnd hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
+#else
         [DllImport("USER32.dll", EntryPoint = "GetMessageW", ExactSpelling = true, SetLastError = true)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         public static extern int GetMessage(MSG* lpMsg, HWnd hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
+#endif
 
+#if NET7_0_OR_GREATER
+        [LibraryImport("USER32.dll")]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static partial bool TranslateMessage(MSG* lpMsg);
+#else
         [DllImport("USER32.dll", ExactSpelling = true)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool TranslateMessage(MSG* lpMsg);
+#endif
 
+#if NET7_0_OR_GREATER
+        [LibraryImport("USER32.dll", EntryPoint = "DispatchMessageW")]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        public static unsafe partial nint DispatchMessage(MSG* lpMsg);
+#else
         [DllImport("USER32.dll", EntryPoint = "DispatchMessageW", ExactSpelling = true)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         public static extern unsafe nint DispatchMessage(MSG* lpMsg);
+#endif
 
+#if NET7_0_OR_GREATER
+        [LibraryImport("USER32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        public static partial bool ShowWindow(HWnd hWnd, int nCmdShow);
+#else
         [DllImport("USER32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         public static extern bool ShowWindow(HWnd hWnd, int nCmdShow);
+#endif
     }
 }
