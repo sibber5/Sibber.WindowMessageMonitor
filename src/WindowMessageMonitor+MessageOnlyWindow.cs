@@ -46,6 +46,11 @@ public sealed partial class WindowMessageMonitor
     /// <para>Creates a window message monitor along with a message-only window (which it monitors).</para>
     /// <para>The monitor owns the window and ensures its disposal when the monitor is disposed. <b>The monitor must be disposed on the same thread it was created on and in the same executing assembly.</b></para>
     /// </summary>
+#if NETSTANDARD
+    /// <exception cref="Win32Exception">Thrown if the HINSTANCE could not be retrieved.</exception>
+#else
+    /// <exception cref="InvalidOperationException">Thrown if the module does not have an HINSTANCE.</exception>
+#endif
     public static WindowMessageMonitor CreateWithMessageOnlyWindow() => new();
 
     private nint WindowProc(HWnd hWnd, uint uMsg, nuint wParam, nint lParam)
