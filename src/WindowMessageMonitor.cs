@@ -2,10 +2,10 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using sibber.Common.Native.Windows.Windowing;
-using sibber.WindowMessageMonitor.Native;
+using Sibber.Common.Native.Windows.Windowing;
+using Sibber.WindowMessageMonitor.Native;
 
-namespace sibber.WindowMessageMonitor;
+namespace Sibber.WindowMessageMonitor;
 
 // From https://github.com/dotMorten/WinUIEx/blob/c363a6d25b586701a7996dfa8622b42a3c3b5740/src/WinUIEx/Messaging/WindowMessageMonitor.cs
 // From https://github.com/dotMorten/WinUIEx by dotMorten (Morten Nielsen)

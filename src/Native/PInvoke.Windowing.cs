@@ -1,9 +1,9 @@
 ﻿using System.Runtime.InteropServices;
-using sibber.Common.Native.Windows;
-using sibber.Common.Native.Windows.Windowing;
-using sibber.WindowMessageMonitor.Native.Windowing;
+using Sibber.Common.Native.Windows;
+using Sibber.Common.Native.Windows.Windowing;
+using Sibber.WindowMessageMonitor.Native.Windowing;
 
-namespace sibber.WindowMessageMonitor.Native;
+namespace Sibber.WindowMessageMonitor.Native;
 
 internal static unsafe partial class PInvoke
 {

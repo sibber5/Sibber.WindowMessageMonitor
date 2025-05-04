@@ -4,7 +4,7 @@ using System.Buffers.Text;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace sibber.WindowMessageMonitor;
+namespace Sibber.WindowMessageMonitor;
 
 internal static class GuidExtensions
 {

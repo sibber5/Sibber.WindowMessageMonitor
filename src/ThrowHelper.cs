@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
-namespace sibber.WindowMessageMonitor;
+namespace Sibber.WindowMessageMonitor;
 
 internal static class ThrowHelper
 {

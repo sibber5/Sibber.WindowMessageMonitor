@@ -1,6 +1,6 @@
-﻿using sibber.Common.Native.Windows.Windowing;
+﻿using Sibber.Common.Native.Windows.Windowing;
 
-namespace sibber.WindowMessageMonitor;
+namespace Sibber.WindowMessageMonitor;
 
 /// <summary>
 /// Event arguments for the <see cref="WindowMessageMonitor.WindowMessageReceived"/> event.

@@ -1,8 +1,8 @@
 ﻿using System.Runtime.InteropServices;
-using sibber.Common.Native.Windows;
-using sibber.Common.Native.Windows.Windowing;
+using Sibber.Common.Native.Windows;
+using Sibber.Common.Native.Windows.Windowing;
 
-namespace sibber.WindowMessageMonitor.Native;
+namespace Sibber.WindowMessageMonitor.Native;
 
 public static partial class Helpers
 {

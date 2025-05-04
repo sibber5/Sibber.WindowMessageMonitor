@@ -1,6 +1,6 @@
-﻿using sibber.Common.Native.Windows.Windowing;
+﻿using Sibber.Common.Native.Windows.Windowing;
 
-namespace sibber.WindowMessageMonitor.Native;
+namespace Sibber.WindowMessageMonitor.Native;
 
 internal static class Macros
 {

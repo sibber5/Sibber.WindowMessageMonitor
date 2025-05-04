@@ -1,12 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
-using sibber.Common.Native.Windows;
-using sibber.Common.Native.Windows.Windowing;
-using sibber.WindowMessageMonitor.Native;
-using sibber.WindowMessageMonitor.Native.Windowing;
-using Helpers = sibber.WindowMessageMonitor.Native.Helpers;
+using Sibber.Common.Native.Windows;
+using Sibber.Common.Native.Windows.Windowing;
+using Sibber.WindowMessageMonitor.Native;
+using Sibber.WindowMessageMonitor.Native.Windowing;
+using Helpers = Sibber.WindowMessageMonitor.Native.Helpers;
 
-namespace sibber.WindowMessageMonitor;
+namespace Sibber.WindowMessageMonitor;
 
 public sealed partial class WindowMessageMonitor
 {
@@ -18,7 +18,7 @@ public sealed partial class WindowMessageMonitor
     {
         _windowProc = new(WindowProc);
 
-        string windowName = $"sibber.WindowMessageMonitor Message Window {Guid.NewGuid().ToBase64()}";
+        string windowName = $"{nameof(Sibber)}.{nameof(WindowMessageMonitor)} Message Window {Guid.NewGuid().ToBase64()}";
         _windowClassName = $"{windowName} Class";
         _instance = Helpers.Windowing.GetCurrentHINSTANCE();
         WNDCLASSW windowClass = new(

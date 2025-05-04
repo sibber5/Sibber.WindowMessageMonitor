@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
-using sibber.Common.Native.Windows;
+using Sibber.Common.Native.Windows;
 
-namespace sibber.WindowMessageMonitor.Native.Windowing;
+namespace Sibber.WindowMessageMonitor.Native.Windowing;
 
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
 internal readonly struct WNDCLASSW(

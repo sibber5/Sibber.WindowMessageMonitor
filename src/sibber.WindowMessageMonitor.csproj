@@ -12,14 +12,14 @@
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     
-    <PackageId>sibber.WindowMessageMonitor</PackageId>
-    <Version>1.2.1</Version>
+    <PackageId>Sibber.WindowMessageMonitor</PackageId>
+    <Version>2.0.0</Version>
     <Authors>sibber</Authors>
     <Description>A class that lets you listen to window messages for a given window, forked from dotMorten/WinUIEx.Messaging.WindowMessageMonitor</Description>
-    <Copyright>Copyright (c) 2025 sibber5</Copyright>
+    <Copyright>Copyright (c) 2025 sibber (GitHub: sibber5)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/sibber5/sibber.WindowMessageMonitor</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/sibber5/sibber.WindowMessageMonitor</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/sibber5/Sibber.WindowMessageMonitor</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sibber5/Sibber.WindowMessageMonitor</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="sibber.Common.Native.Windows" Version="1.0.*" />
+    <PackageReference Include="Sibber.Common.Native.Windows" Version="2.0.*" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
-﻿using sibber.Common.Native.Windows.Windowing;
+﻿using Sibber.Common.Native.Windows.Windowing;
 
-namespace sibber.WindowMessageMonitor;
+namespace Sibber.WindowMessageMonitor;
 
 /// <summary>
 /// Implementations of this interface monitors window messages sent to a specified window and notify subsribers when messages are recieved.
