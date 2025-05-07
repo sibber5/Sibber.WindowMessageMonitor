@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using Sibber.Common.Native.Windows;
 using Sibber.Common.Native.Windows.Windowing;
 using Sibber.WindowMessageMonitor.Native.Windowing;
@@ -11,11 +12,11 @@ internal static unsafe partial class PInvoke
     {
         [DllImport("USER32.dll", EntryPoint = "DefWindowProcW", ExactSpelling = true)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern nint DefWindowProc(HWnd hWnd, uint Msg, nuint wParam, nint lParam);
+        public static extern IntPtr DefWindowProc(HWnd hWnd, uint Msg, UIntPtr wParam, IntPtr lParam);
 
         [DllImport("COMCTL32.dll", ExactSpelling = true)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern nint DefSubclassProc(HWnd hWnd, uint uMsg, nuint wParam, nint lParam);
+        public static extern IntPtr DefSubclassProc(HWnd hWnd, uint uMsg, UIntPtr wParam, IntPtr lParam);
 
 #if NET7_0_OR_GREATER
         public static unsafe bool SetWindowSubclass(HWnd hWnd, delegate* unmanaged[Stdcall]<HWnd, uint, nuint, nint, nuint, nuint, nint> pfnSubclass, nuint uIdSubclass, nuint dwRefData)
@@ -35,17 +36,17 @@ internal static unsafe partial class PInvoke
         private static unsafe partial bool RemoveWindowSubclass(nint hWnd, delegate* unmanaged[Stdcall]<HWnd, uint, nuint, nint, nuint, nuint, nint> pfnSubclass, nuint uIdSubclass);
 #else
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        public unsafe delegate nint SUBCLASSPROC(HWnd hWnd, uint uMsg, nuint wParam, nint lParam, nuint uIdSubclass, nuint dwRefData);
+        public unsafe delegate IntPtr SUBCLASSPROC(HWnd hWnd, uint uMsg, UIntPtr wParam, IntPtr lParam, UIntPtr uIdSubclass, UIntPtr dwRefData);
 
         [DllImport("COMCTL32.dll", ExactSpelling = true)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern unsafe bool SetWindowSubclass(HWnd hWnd, SUBCLASSPROC pfnSubclass, nuint uIdSubclass, nuint dwRefData);
+        public static extern unsafe bool SetWindowSubclass(HWnd hWnd, SUBCLASSPROC pfnSubclass, UIntPtr uIdSubclass, UIntPtr dwRefData);
 
         [DllImport("COMCTL32.dll", ExactSpelling = true)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern unsafe bool RemoveWindowSubclass(HWnd hWnd, SUBCLASSPROC pfnSubclass, nuint uIdSubclass);
+        public static extern unsafe bool RemoveWindowSubclass(HWnd hWnd, SUBCLASSPROC pfnSubclass, UIntPtr uIdSubclass);
 #endif
 
         [DllImport("USER32.dll", EntryPoint = "RegisterClassW", ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]

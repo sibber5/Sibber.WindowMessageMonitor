@@ -4,7 +4,7 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <TargetFrameworks>net8.0-windows;netstandard2.0</TargetFrameworks>
-    <LangVersion>13.0</LangVersion>
+    <LangVersion>12.0</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     
     <AnalysisLevel>latest-all</AnalysisLevel>
@@ -13,7 +13,7 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     
     <PackageId>Sibber.WindowMessageMonitor</PackageId>
-    <Version>2.0.1</Version>
+    <Version>2.0.2</Version>
     <Authors>sibber</Authors>
     <Description>A class that lets you listen to window messages for a given window, forked from dotMorten/WinUIEx.Messaging.WindowMessageMonitor</Description>
     <Copyright>Copyright (c) 2025 sibber (GitHub: sibber5)</Copyright>
@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Sibber.Common.Native.Windows" Version="2.0.*" />
+    <PackageReference Include="Sibber.Common.Native.Windows" Version="2.0.1" />
   </ItemGroup>
 
 </Project>

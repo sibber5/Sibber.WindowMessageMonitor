@@ -1,4 +1,5 @@
-﻿using Sibber.Common.Native.Windows.Windowing;
+﻿using System;
+using Sibber.Common.Native.Windows.Windowing;
 
 namespace Sibber.WindowMessageMonitor;
 
@@ -7,7 +8,7 @@ namespace Sibber.WindowMessageMonitor;
 /// </summary>
 public readonly record struct WindowMessageEventArgs
 {
-    internal WindowMessageEventArgs(HWnd hWnd, uint messageId, nuint wParam, nint lParam)
+    internal WindowMessageEventArgs(HWnd hWnd, uint messageId, UIntPtr wParam, IntPtr lParam)
     {
         Message = new(hWnd, messageId, wParam, lParam, default, default);
     }
@@ -16,7 +17,7 @@ public readonly record struct WindowMessageEventArgs
     /// The result after processing the message. Use this to set the return result, after also setting <see cref="Handled"/> to <see langword="true"/>.
     /// </summary>
     /// <seealso cref="Handled"/>
-    public nint Result { readonly get; init; }
+    public IntPtr Result { readonly get; init; }
 
     /// <summary>
     /// Indicates whether this message was handled and the <see cref="Result"/> value should be returned.

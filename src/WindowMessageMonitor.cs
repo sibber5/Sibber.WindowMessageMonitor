@@ -50,8 +50,8 @@ public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDispo
     private PInvoke.Windowing.SUBCLASSPROC? _callback;
 #endif
 
-    private static nuint _classIdCounter = 101;
-    private readonly nuint _classId;
+    private static UIntPtr _subclassIdCounter = new(101);
+    private readonly UIntPtr _subclassId;
 
     private bool _disposed;
 
@@ -62,7 +62,8 @@ public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDispo
     public WindowMessageMonitor(HWnd hWnd)
     {
         HWnd = hWnd;
-        _classId = _classIdCounter++;
+        _subclassId = _subclassIdCounter;
+        _subclassIdCounter += 1;
     }
 
     ~WindowMessageMonitor()
@@ -120,15 +121,19 @@ public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDispo
     }
     private event RefEventHandler<WindowMessageEventArgs>? _windowMessageReceived;
 
-
 #if NET7_0_OR_GREATER
     [UnmanagedCallersOnly(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvStdcall)])]
     private static nint SubclassWindowProc(HWnd hWnd, uint uMsg, nuint wParam, nint lParam, nuint uIdSubclass, nuint dwRefData)
 #else
-    private nint SubclassWindowProc(HWnd hWnd, uint uMsg, nuint wParam, nint lParam, nuint uIdSubclass, nuint dwRefData)
+    private unsafe IntPtr SubclassWindowProc(HWnd hWnd, uint uMsg, UIntPtr wParam, IntPtr lParam, UIntPtr uIdSubclass, UIntPtr dwRefData)
 #endif
     {
-        var handle = GCHandle.FromIntPtr((nint)dwRefData);
+#if NET7_0_OR_GREATER
+        var refData = (nint)dwRefData;
+#else
+        var refData = (IntPtr)dwRefData.ToPointer();
+#endif
+        var handle = GCHandle.FromIntPtr(refData);
         if (handle is { IsAllocated: true, Target: WindowMessageMonitor monitor })
         {
             var eventHandler = monitor._windowMessageReceived;
@@ -155,10 +160,10 @@ public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDispo
             
             _monitorGCHandle = GCHandle.Alloc(this);
 #if NET7_0_OR_GREATER
-            bool ok = PInvoke.Windowing.SetWindowSubclass(HWnd, &SubclassWindowProc, _classId, (nuint)GCHandle.ToIntPtr(_monitorGCHandle.Value).ToPointer());
+            bool ok = PInvoke.Windowing.SetWindowSubclass(HWnd, &SubclassWindowProc, _subclassId, (nuint)GCHandle.ToIntPtr(_monitorGCHandle.Value).ToPointer());
 #else
             _callback = new(SubclassWindowProc);
-            bool ok = PInvoke.Windowing.SetWindowSubclass(HWnd, _callback, _classId, (nuint)GCHandle.ToIntPtr(_monitorGCHandle.Value).ToPointer());
+            bool ok = PInvoke.Windowing.SetWindowSubclass(HWnd, _callback, _subclassId, (UIntPtr)GCHandle.ToIntPtr(_monitorGCHandle.Value).ToPointer());
 #endif
             if (!ok) throw new Win32Exception(Macros.E_FAIL, "Error setting window subclass.");
         }
@@ -175,9 +180,9 @@ public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDispo
             if (!_monitorGCHandle.HasValue) return;
 
 #if NET7_0_OR_GREATER
-            bool ok = PInvoke.Windowing.RemoveWindowSubclass(HWnd, &SubclassWindowProc, _classId);
+            bool ok = PInvoke.Windowing.RemoveWindowSubclass(HWnd, &SubclassWindowProc, _subclassId);
 #else
-            bool ok = PInvoke.Windowing.RemoveWindowSubclass(HWnd, _callback!, _classId);
+            bool ok = PInvoke.Windowing.RemoveWindowSubclass(HWnd, _callback!, _subclassId);
 #endif
             if (!disposing && !ok) throw new Win32Exception(Macros.E_FAIL, "Error removing window subclass.");
 

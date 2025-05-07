@@ -14,6 +14,7 @@ public sealed partial class WindowMessageMonitor
     private readonly string? _windowClassName;
     private readonly Handle _instance;
 
+    /// <inheritdoc cref="CreateWithMessageOnlyWindow"/>
     private WindowMessageMonitor()
     {
         _windowProc = new(WindowProc);
@@ -37,8 +38,6 @@ public sealed partial class WindowMessageMonitor
 
         HWnd = Helpers.Windowing.CreateMessageOnlyWindow(_windowClassName, windowName, _instance);
 
-        _classId = _classIdCounter++;
-
         if (HWnd == HWnd.Null) throw new Win32Exception();
     }
 
@@ -53,7 +52,7 @@ public sealed partial class WindowMessageMonitor
 #endif
     public static WindowMessageMonitor CreateWithMessageOnlyWindow() => new();
 
-    private nint WindowProc(HWnd hWnd, uint uMsg, nuint wParam, nint lParam)
+    private IntPtr WindowProc(HWnd hWnd, uint uMsg, UIntPtr wParam, IntPtr lParam)
     {
         var args = new WindowMessageEventArgs(hWnd, uMsg, wParam, lParam);
         _windowMessageReceived?.Invoke(this, ref args);
