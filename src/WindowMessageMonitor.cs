@@ -36,7 +36,7 @@ namespace Sibber.WindowMessageMonitor;
 /// <summary>
 /// Monitors window messages sent to the specified window and notifies subsribers when messages are recieved.<br/>
 /// <br/>
-/// <b>WARNING:</b> you cannot subscribe to a monitor for an existing window across threads.
+/// <b>WARNING:</b> You cannot subscribe to a monitor for an existing window across threads.
 /// </summary>
 /// <remarks>
 /// If the instance was created with <see cref="CreateWithMessageOnlyWindow"/> then it must be disposed on the same thread it was created on and in the same executing assembly.<br/>
@@ -115,7 +115,7 @@ public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDispo
     }
 
     /// <summary>
-    /// <b>WARNING:</b> You must subscribe to this even on the same thread as the window that this instance monitors.
+    /// <b>WARNING:</b> You must subscribe to this event on the same thread as the window that this instance monitors.
     /// </summary>
     /// <inheritdoc cref="IWindowMessageMonitor.WindowMessageReceived"/>
     /// <exception cref="Win32Exception"></exception>

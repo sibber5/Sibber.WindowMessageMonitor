@@ -8,7 +8,7 @@ A class that lets you listen to window messages for a given window, forked from 
 If you have an existing window:
 ```cs
 var monitor = new WindowMessageMonitor(windowHandle);
-monitor += (object sender, ref WindowMessageEventArgs e) =>
+monitor.WindowMessageReceived += (object sender, ref WindowMessageEventArgs e) =>
 {
     Debug.WriteLine($"Recieved message: {e.MessageType} with wParam: {e.Message.WParam} and LParam: {e.Message.LParam}");
 
@@ -18,6 +18,9 @@ monitor += (object sender, ref WindowMessageEventArgs e) =>
     e = e with { Handled = true, Result = 0 };
 }
 ```
+
+> [!CAUTION]
+> You must subscribe to `WindowMessageReceived` on the same thread as the window that this instance monitors.
 
 Or you can create a [message-only window](https://learn.microsoft.com/en-us/windows/win32/winmsg/window-features#message-only-windows):
 ```cs
