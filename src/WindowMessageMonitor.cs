@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Sibber.Common.Native.Windows.Windowing;
 using Sibber.WindowMessageMonitor.Native;
 
@@ -33,7 +34,9 @@ namespace Sibber.WindowMessageMonitor;
 // SOFTWARE.
 
 /// <summary>
-/// Monitors window messages sent to the specified window and notifies subsribers when messages are recieved.
+/// Monitors window messages sent to the specified window and notifies subsribers when messages are recieved.<br/>
+/// <br/>
+/// <b>WARNING:</b> you cannot subscribe to a monitor for an existing window across threads.
 /// </summary>
 /// <remarks>
 /// If the instance was created with <see cref="CreateWithMessageOnlyWindow"/> then it must be disposed on the same thread it was created on and in the same executing assembly.<br/>
@@ -50,7 +53,8 @@ public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDispo
     private PInvoke.Windowing.SUBCLASSPROC? _callback;
 #endif
 
-    private static UIntPtr _subclassIdCounter = new(101);
+    private static long MaxSubclassId => Environment.Is64BitProcess ? long.MaxValue : uint.MaxValue;
+    private static long _subclassIdCounter = 100;
     private readonly UIntPtr _subclassId;
 
     private bool _disposed;
@@ -58,12 +62,22 @@ public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDispo
     /// <summary>
     /// Initialize a new instance of the <see cref="WindowMessageMonitor"/> class.
     /// </summary>
+    /// <remarks>
+    /// This constructor is thread safe.
+    /// </remarks>
     /// <param name="hWnd">The window handle to listen to messages for.</param>
     public WindowMessageMonitor(HWnd hWnd)
     {
         HWnd = hWnd;
-        _subclassId = _subclassIdCounter;
-        _subclassIdCounter += 1;
+
+        var id = Interlocked.Increment(ref _subclassIdCounter);
+        if (id < 0 || id > MaxSubclassId)
+        {
+            Interlocked.Decrement(ref _subclassIdCounter);
+            throw new InvalidOperationException("Ran out of IDs.");
+        }
+
+        _subclassId = new((ulong)id);
     }
 
     ~WindowMessageMonitor()
@@ -100,6 +114,9 @@ public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDispo
         _disposed = true;
     }
 
+    /// <summary>
+    /// <b>WARNING:</b> You must subscribe to this even on the same thread as the window that this instance monitors.
+    /// </summary>
     /// <inheritdoc cref="IWindowMessageMonitor.WindowMessageReceived"/>
     /// <exception cref="Win32Exception"></exception>
     public event RefEventHandler<WindowMessageEventArgs> WindowMessageReceived
