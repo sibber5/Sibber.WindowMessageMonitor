@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Sibber.Common.Native.Windows;
 using Sibber.Common.Native.Windows.Windowing;
 using Sibber.WindowMessageMonitor.Native.Windowing;
-
 namespace Sibber.WindowMessageMonitor.Native;
 
 internal static unsafe partial class PInvoke
@@ -19,6 +19,7 @@ internal static unsafe partial class PInvoke
         public static extern IntPtr DefSubclassProc(HWnd hWnd, uint uMsg, UIntPtr wParam, IntPtr lParam);
 
 #if NET7_0_OR_GREATER
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe bool SetWindowSubclass(HWnd hWnd, delegate* unmanaged[Stdcall]<HWnd, uint, nuint, nint, nuint, nuint, nint> pfnSubclass, nuint uIdSubclass, nuint dwRefData)
             => SetWindowSubclass(hWnd.Value, pfnSubclass, uIdSubclass, dwRefData);
 
@@ -27,6 +28,7 @@ internal static unsafe partial class PInvoke
         [return: MarshalAs(UnmanagedType.Bool)]
         private static unsafe partial bool SetWindowSubclass(nint hWnd, delegate* unmanaged[Stdcall]<HWnd, uint, nuint, nint, nuint, nuint, nint> pfnSubclass, nuint uIdSubclass, nuint dwRefData);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe bool RemoveWindowSubclass(HWnd hWnd, delegate* unmanaged[Stdcall]<HWnd, uint, nuint, nint, nuint, nuint, nint> pfnSubclass, nuint uIdSubclass)
             => RemoveWindowSubclass(hWnd.Value, pfnSubclass, uIdSubclass);
 
@@ -51,12 +53,23 @@ internal static unsafe partial class PInvoke
 
         [DllImport("USER32.dll", EntryPoint = "RegisterClassW", ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        public static extern unsafe ushort RegisterClass(ref WNDCLASSW lpWndClass);
+        public static extern ushort RegisterClass(ref WNDCLASSW lpWndClass);
 
+#if NET7_0_OR_GREATER
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool UnregisterClass(string lpClassName, Handle hInstance)
+            => UnregisterClass(lpClassName, hInstance.Value);
+
+        [LibraryImport("USER32.dll", EntryPoint = "UnregisterClassW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static partial bool UnregisterClass([MarshalAs(UnmanagedType.LPWStr)] string lpClassName, nint hInstance);
+#else
         [DllImport("USER32.dll", EntryPoint = "UnregisterClassW", ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool UnregisterClass([MarshalAs(UnmanagedType.LPWStr)] string lpClassName, Handle hInstance);
+#endif
 
 #if NET7_0_OR_GREATER
         public static bool DestroyWindow(HWnd hWnd) => DestroyWindow(hWnd.Value);
