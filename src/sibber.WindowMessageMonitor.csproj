@@ -30,7 +30,7 @@
 
   <ItemGroup>
     <None Include="../README.md" Pack="true" PackagePath="/" Visible="false" />
-    
+    <!-- icon.png is downloaded from sibber5/nuget-configs during the publish CI workflow -->
     <None Include="./icon.png" Pack="true" PackagePath="/" Visible="false"/>
   </ItemGroup>
 

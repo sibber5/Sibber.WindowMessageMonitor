@@ -1,0 +1,48 @@
+name: 'Build and Publish to NuGet'
+run-name: ${{ github.actor }} is building and publishing package to NuGet
+on:
+  push:
+    # If you also only want to trigger when this tag is pushed to 'main' (or a specific branch),
+    # you can uncomment the condition for the 'build-documentation' job, but see the warning.
+    # that check is done in the job because it can't be done here.
+    tags:
+      - 'v[0-9]+.[0-9]+*'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    # Only run when the tag that triggered the workflow is pushed to 'main'.
+    # WARNING: not very reliable, e.g. it doesnt work if the tag is annotated.
+    # if: github.event.base_ref == 'refs/heads/main' || contains(github.event.base_ref, 'refs/heads/main')
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+          dotnet-quality: 'ga'
+
+      - run: dotnet tool update -g docfx
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore -c Release
+
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+
+      - name: Download icon
+        run: curl -L https://raw.githubusercontent.com/sibber5/nuget-configs/refs/heads/main/icon.png -o icon.png
+
+      - name: Pack
+        run: dotnet pack --no-build -c Release --output nupkgs
+
+      - name: Push package
+        run: dotnet nuget push "./nupkgs/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
