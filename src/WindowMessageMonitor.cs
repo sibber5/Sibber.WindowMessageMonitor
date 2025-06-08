@@ -1,4 +1,10 @@
-﻿using System;
+﻿// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 sibber (GitHub: sibber5)
+// Copyright (c) 2021 Morten Nielsen
+// Modified version of https://github.com/dotMorten/WinUIEx/blob/c363a6d25b586701a7996dfa8622b42a3c3b5740/src/WinUIEx/Messaging/WindowMessageMonitor.cs
+// From https://github.com/dotMorten/WinUIEx by dotMorten (Morten Nielsen)
+
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -7,31 +13,6 @@ using Sibber.Common.Native.Windows.Windowing;
 using Sibber.WindowMessageMonitor.Native;
 
 namespace Sibber.WindowMessageMonitor;
-
-// From https://github.com/dotMorten/WinUIEx/blob/c363a6d25b586701a7996dfa8622b42a3c3b5740/src/WinUIEx/Messaging/WindowMessageMonitor.cs
-// From https://github.com/dotMorten/WinUIEx by dotMorten (Morten Nielsen)
-// 
-// MIT License
-// 
-// Copyright (c) 2021 Morten Nielsen
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
 
 /// <summary>
 /// Monitors window messages sent to the specified window and notifies subsribers when messages are recieved.<br/>
@@ -182,7 +163,8 @@ public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDispo
             _callback = new(SubclassWindowProc);
             bool ok = PInvoke.Windowing.SetWindowSubclass(HWnd, _callback, _subclassId, (UIntPtr)GCHandle.ToIntPtr(_monitorGCHandle.Value).ToPointer());
 #endif
-            if (!ok) throw new Win32Exception(Macros.E_FAIL, "Error setting window subclass.");
+            // pass error code 0 because there is error code for generic failure.
+            if (!ok) throw new Win32Exception(0, "Error setting window subclass.\nThe operation did not complete successfully despite the native error code being 0 (ERROR_SUCCESS).");
         }
     }
 
@@ -201,7 +183,7 @@ public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDispo
 #else
             bool ok = PInvoke.Windowing.RemoveWindowSubclass(HWnd, _callback!, _subclassId);
 #endif
-            if (!disposing && !ok) throw new Win32Exception(Macros.E_FAIL, "Error removing window subclass.");
+            if (!disposing && !ok) throw new Win32Exception(0, "Error removing window subclass.\nThe operation did not complete successfully despite the native error code being 0 (ERROR_SUCCESS).");
 
             _monitorGCHandle?.Free();
             _monitorGCHandle = null;

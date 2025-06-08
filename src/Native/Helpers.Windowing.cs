@@ -1,4 +1,7 @@
-﻿using System;
+﻿// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 sibber (GitHub: sibber5)
+
+using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Sibber.Common.Native.Windows;
@@ -12,7 +15,8 @@ internal static partial class Helpers
     {
         public static unsafe HWnd CreateMessageOnlyWindow(string className, string? windowName, Handle instance)
         {
-            return PInvoke.Windowing.CreateWindowEx(0, className, windowName, 0, 0, 0, 0, 0, Macros.HWND_MESSAGE, Handle.Null, instance);
+            HWnd HWND_MESSAGE = unchecked((HWnd)(IntPtr)(-3));
+            return PInvoke.Windowing.CreateWindowEx(0, className, windowName, 0, 0, 0, 0, 0, HWND_MESSAGE, Handle.Null, instance);
         }
 
         /// <returns>The HINSTANCE for the module that contains the type <see cref="WindowMessageMonitor"/>.</returns>

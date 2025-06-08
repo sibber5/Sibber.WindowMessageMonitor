@@ -14,7 +14,7 @@
     
     <PackageId>Sibber.WindowMessageMonitor</PackageId>
     <PackageIcon>icon.png</PackageIcon>
-    <Version>2.0.5</Version>
+    <Version>3.0.0</Version>
     <Authors>sibber</Authors>
     <Description>A class that lets you listen to window messages for a given window, forked from dotMorten/WinUIEx.Messaging.WindowMessageMonitor</Description>
     <Copyright>Copyright (c) 2025 sibber (GitHub: sibber5)</Copyright>
@@ -31,16 +31,16 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.*" />
-    <PackageReference Include="PolySharp" Version="1.15.*">
+    <PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
+    <PackageReference Include="PolySharp" Version="1.15.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.Memory" Version="4.6.*" />
+    <PackageReference Include="System.Memory" Version="4.6.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Sibber.Common.Native.Windows" Version="[2.0.1,3.0.0)" />
+    <PackageReference Include="Sibber.Common.Native.Windows" Version="[3.0.1,4.0.0)" />
   </ItemGroup>
 
 </Project>

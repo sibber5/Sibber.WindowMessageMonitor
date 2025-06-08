@@ -1,4 +1,7 @@
-﻿using System;
+﻿// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 sibber (GitHub: sibber5)
+
+using System;
 using Sibber.Common.Native.Windows.Windowing;
 
 namespace Sibber.WindowMessageMonitor;
@@ -29,7 +32,7 @@ public readonly record struct WindowMessageEventArgs
     /// <summary>
     /// The Windows WM Message
     /// </summary>
-    public readonly MSG Message { get; }
+    public readonly Msg Message { get; }
 
     public readonly WindowMessage MessageType => (WindowMessage)Message.MessageId;
 }
