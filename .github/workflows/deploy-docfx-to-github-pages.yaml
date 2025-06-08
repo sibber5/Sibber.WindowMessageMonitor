@@ -44,6 +44,10 @@ jobs:
       - name: Create index.md from README
         run: cp README.md docs/index.md
 
+      - name: Prepend docfx layout header
+        working-directory: ./docs
+        run: 'sed -i "1s;^;---\n_layout: landing\n---\n\n;" index.md'
+
       - name: Download icon
         working-directory: ./docs/images
         run: curl -L https://raw.githubusercontent.com/sibber5/nuget-configs/refs/heads/main/icon.svg -o icon.svg
