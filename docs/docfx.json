@@ -1,0 +1,56 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dotnet/docfx/main/schemas/docfx.schema.json",
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "../src",
+          "files": [
+            "**/*.csproj"
+          ]
+        }
+      ],
+      "dest": "api"
+    }
+  ],
+  "build": {
+    "xref": [
+      "https://sibber5.github.io/Sibber.Common.Native.Windows/xrefmap.yml"
+    ],
+    "content": [
+      {
+        "files": [
+          "**/*.{md,yml}"
+        ],
+        "exclude": [
+          "_site/**"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
+    "output": "_site",
+    "template": [
+      "default",
+      "./templates/modern",
+      "./templates/customizations"
+    ],
+    "postProcessors": ["ExtractSearchIndex", "ExtractSearchIndexEx"],
+    "globalMetadata": {
+      "_appLogoPath": "images/icon.svg",
+      "_appFaviconPath": "images/favicon.ico",
+      "_appName": "Sibber.WindowMessageMonitor",
+      "_appTitle": "Sibber.WindowMessageMonitor",
+      "_enableSearch": true,
+      "_searchIndexUseMetadata": true,
+      "_searchIndexUseMetadataTitle": false,
+      "_searchIndexStripSiteNameFromTitle": true,
+      "pdf": false
+    }
+  }
+}
