@@ -19,7 +19,7 @@
     <Description>A class that lets you listen to window messages for a given window, forked from dotMorten/WinUIEx.Messaging.WindowMessageMonitor</Description>
     <Copyright>Copyright (c) 2025 sibber (GitHub: sibber5)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/sibber5/Sibber.WindowMessageMonitor</PackageProjectUrl>
+    <PackageProjectUrl>https://sibber5.github.io/Sibber.WindowMessageMonitor</PackageProjectUrl>
     <RepositoryUrl>https://github.com/sibber5/Sibber.WindowMessageMonitor</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <!-- For Source Link -->
