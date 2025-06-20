@@ -1,0 +1,12 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dotnet/docfx/main/schemas/docfx.schema.json",
+  "build": {
+    "xref": [
+      "https://sibber5.github.io/Sibber.Common.Native.Windows/xrefmap.yml"
+    ],
+    "globalMetadata": {
+      "_appName": "Sibber.WindowMessageMonitor",
+      "_appTitle": "Sibber.WindowMessageMonitor"
+    }
+  }
+}
