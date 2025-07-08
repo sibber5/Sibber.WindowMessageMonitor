@@ -3,6 +3,8 @@
 
 A class that lets you listen to window messages for a given window, forked from [dotMorten/WinUIEx.Messaging.WindowMessageMonitor](https://github.com/dotMorten/WinUIEx/blob/c363a6d25b586701a7996dfa8622b42a3c3b5740/src/WinUIEx/Messaging/WindowMessageMonitor.cs).
 
+[See documentation and API reference](https://sibber5.github.io/Sibber.WindowMessageMonitor/)
+
 # Usage
 
 If you have an existing window:

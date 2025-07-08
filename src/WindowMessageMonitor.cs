@@ -14,20 +14,43 @@ using Sibber.WindowMessageMonitor.Native;
 
 namespace Sibber.WindowMessageMonitor;
 
+#if DOCFX
 /// <summary>
-/// Monitors window messages sent to the specified window and notifies subsribers when messages are recieved.<br/>
-/// <br/>
-/// <b>WARNING:</b> You cannot subscribe to a monitor for an existing window across threads.
+/// Monitors window messages sent to the specified window and notifies subscribers when messages are received.
 /// </summary>
 /// <remarks>
-/// If the instance was created with <see cref="CreateWithMessageOnlyWindow"/> then it must be disposed on the same thread it was created on and in the same executing assembly.<br/>
-/// Disposing is not thread safe.<br/>
-/// Subscribing and unsubscribing to the events is thread safe.
+/// <![CDATA[
+/// > [!CAUTION]
+/// > You cannot subscribe to a monitor for an existing window across threads.
+/// ]]>
+/// <![CDATA[
+/// > [!CAUTION]
+/// > If the instance was created with [CreateWithMessageOnlyWindow()](xref:Sibber.WindowMessageMonitor.WindowMessageMonitor.CreateWithMessageOnlyWindow) then it must be disposed on the same thread it was created on and in the same executing assembly.
+/// ]]>
+/// <![CDATA[
+/// > [!THREADUNSAFE]
+/// > Disposing is not thread-safe.
+/// ]]>
+/// <![CDATA[
+/// > [!THREADSAFE]
+/// > Subscribing and unsubscribing to the events is thread-safe.
+/// ]]>
 /// </remarks>
+#else
+/// <summary>
+/// Monitors window messages sent to the specified window and notifies subscribers when messages are received.
+/// </summary>
+/// <remarks>
+/// <para><b>WARNING:</b> You cannot subscribe to a monitor for an existing window across threads.</para>
+/// <para>If the instance was created with <see cref="CreateWithMessageOnlyWindow"/> then it must be disposed on the same thread it was created on and in the same executing assembly.</para>
+/// <para>Disposing is not thread-safe.</para>
+/// <para>Subscribing and unsubscribing to the events is thread-safe.</para>
+/// </remarks>
+#endif
 public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDisposable
 {
     public HWnd HWnd { get; }
-    
+
     private GCHandle? _monitorGCHandle;
     private readonly object _lockObject = new();
 #if !NET7_0_OR_GREATER
@@ -155,7 +178,7 @@ public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDispo
             ThrowHelper.ThrowIfDisposed(_disposed, this);
             Debug.Assert(_windowClassName is null);
             if (_monitorGCHandle.HasValue) return;
-            
+
             _monitorGCHandle = GCHandle.Alloc(this);
 #if NET7_0_OR_GREATER
             bool ok = PInvoke.Windowing.SetWindowSubclass(HWnd, &SubclassWindowProc, _subclassId, (nuint)GCHandle.ToIntPtr(_monitorGCHandle.Value).ToPointer());
