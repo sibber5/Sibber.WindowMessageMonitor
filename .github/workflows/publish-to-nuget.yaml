@@ -1,3 +1,4 @@
+# v1.0.0
 name: 'Build and Publish to NuGet'
 run-name: ${{ github.actor }} is building and publishing package to NuGet
 on:
