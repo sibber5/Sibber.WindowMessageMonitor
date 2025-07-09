@@ -33,7 +33,7 @@ namespace Sibber.WindowMessageMonitor;
 /// ]]>
 /// <![CDATA[
 /// > [!THREADSAFE]
-/// > Subscribing and unsubscribing to the events is thread-safe.
+/// > Constructing instances and subscribing to and unsubscribing from events are thread-safe.
 /// ]]>
 /// </remarks>
 #else
@@ -44,7 +44,7 @@ namespace Sibber.WindowMessageMonitor;
 /// <para><b>WARNING:</b> You cannot subscribe to a monitor for an existing window across threads.</para>
 /// <para>If the instance was created with <see cref="CreateWithMessageOnlyWindow"/> then it must be disposed on the same thread it was created on and in the same executing assembly.</para>
 /// <para>Disposing is not thread-safe.</para>
-/// <para>Subscribing and unsubscribing to the events is thread-safe.</para>
+/// <para>Constructing instances and subscribing to and unsubscribing from events are thread-safe.</para>
 /// </remarks>
 #endif
 public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDisposable
@@ -67,7 +67,7 @@ public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDispo
     /// Initialize a new instance of the <see cref="WindowMessageMonitor"/> class.
     /// </summary>
     /// <remarks>
-    /// This constructor is thread safe.
+    /// This constructor is thread-safe.
     /// </remarks>
     /// <param name="hWnd">The window handle to listen to messages for.</param>
     public WindowMessageMonitor(HWnd hWnd)
@@ -121,6 +121,9 @@ public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDispo
     /// <summary>
     /// <b>WARNING:</b> You must subscribe to this event on the same thread as the window that this instance monitors.
     /// </summary>
+    /// <remarks>
+    /// Subscribing to and unsubscribing from this event is thread-safe.
+    /// </remarks>
     /// <inheritdoc cref="IWindowMessageMonitor.WindowMessageReceived"/>
     /// <exception cref="Win32Exception"></exception>
     public event RefEventHandler<WindowMessageEventArgs> WindowMessageReceived
@@ -145,13 +148,11 @@ public sealed partial class WindowMessageMonitor : IWindowMessageMonitor, IDispo
 #if NET7_0_OR_GREATER
     [UnmanagedCallersOnly(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvStdcall)])]
     private static nint SubclassWindowProc(HWnd hWnd, uint uMsg, nuint wParam, nint lParam, nuint uIdSubclass, nuint dwRefData)
-#else
-    private unsafe IntPtr SubclassWindowProc(HWnd hWnd, uint uMsg, UIntPtr wParam, IntPtr lParam, UIntPtr uIdSubclass, UIntPtr dwRefData)
-#endif
     {
-#if NET7_0_OR_GREATER
         var refData = (nint)dwRefData;
 #else
+    private unsafe IntPtr SubclassWindowProc(HWnd hWnd, uint uMsg, UIntPtr wParam, IntPtr lParam, UIntPtr uIdSubclass, UIntPtr dwRefData)
+    {
         var refData = (IntPtr)dwRefData.ToPointer();
 #endif
         var handle = GCHandle.FromIntPtr(refData);
